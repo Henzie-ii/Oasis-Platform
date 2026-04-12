@@ -1,10 +1,17 @@
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
+import sys, os
 
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, os.path.join(BASE_DIR , 'apps'))
 
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
@@ -21,9 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #local apps
-    'apps.authentication',
-    'apps.projects',
-    'apps.tasks',
+    'authentication',
+    'projects',
+    'tasks',
 
     #third party apps
     'rest_framework',
