@@ -25,6 +25,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #local apps
+    'apps.authentication',
+    'apps.projects',
+    'apps.tasks',
+
+    #third party apps
+    'rest_framework',
+    'rest_framework_simplejwt'
+
 ]
 
 MIDDLEWARE = [
@@ -86,10 +96,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#Authentication settings
 AUTHENTICATION_BACKENDS = [
     'apps.authentication.backends.EmailOrUsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
 ] 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 
 # Internationalization
