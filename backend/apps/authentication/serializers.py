@@ -1,3 +1,4 @@
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from .models import CustomUser
 
@@ -21,4 +22,15 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
         return user
         
+class CustomTokenObtainPairView(TokenObtainPairSerializer):
+    def validate(self,attrs):
+        #the base validate method handles the actual authentication and token generation
+        data = super().validate(attrs)
 
+        #add custom JSON data to get login response
+        data['user'] = {
+            'username': self.user.username,
+            'email': self.user.email,
+            'bio': self.user.bio,
+        } 
+        return data 
