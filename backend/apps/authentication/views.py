@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from serializers import RegisterSerializer, UserSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class RegisterView(generics.CreateAPIView):
     #this allows anyone (even unauthenticated users) to access this view
@@ -11,7 +12,6 @@ class RegisterView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
        serializer = self.get_serializer(data=request.data)
        if serializer.is_valid():
-           
            user = serializer.save()
            return Response({
                'user':UserSerializer(user, context=self.get_serializer_context()).data,
@@ -19,4 +19,17 @@ class RegisterView(generics.CreateAPIView):
             }, status=status.HTTP_201_CREATED)
         
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomTokenObtainPairView(TokenObtainPairSerializer):
+    def validate(self,attrs):
+        #the base validate method handles the actual authentication and token generation
+        data = super().validate(attrs)
+
+        #add custom JSON data to get login response
+        data['user'] = {
+            'username': self.user.username,
+            'email': self.user.email,
+            'bio': self.user.bio,
+        } 
+        return data 
 
