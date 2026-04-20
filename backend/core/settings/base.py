@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #local apps
-    'apps.authentication',
+    'apps.apps.AuthenticationConfig',
     'apps.projects',
     'apps.tasks',
 
